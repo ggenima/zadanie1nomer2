@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double x_start, x_end, dx, epsilon;
+
+    // Vvod parametrov
+    printf("nachalnoe x (xstart): ");
+    scanf_s("%lf", &x_start);
+    printf("konechnoe x (xend): ");
+    scanf_s("%lf", &x_end);
+    printf(" dx: ");
+    scanf_s("%lf", &dx);
+    printf("tochnosti ε: ");
+    scanf_s("%lf", &epsilon);
+    printf("\nresultati dlya sin(x) shitaem dlya tochnosti %g:\n", epsilon);
+    printf("--------------------------------------------\n");
+    printf("    x      shitaem sin(x)  standarniy sin(x)\n");
+    printf("--------------------------------------------\n");
+
+    // Cikl po znacheniyam x
+    for (double x = x_start; x <= x_end; x += dx) {
+        double term = x;  // Perviy chlen ryada (n=0)
+        double sum = term;
+        int n = 0;
+
+        // Vychislenie summy ryada poka chlen ryada bolshe epsilon
+        while (fabs(term) >= epsilon) {
+            n++;
+            term *= -x * x / ((2 * n) * (2 * n + 1)); // Rekurrentnoe sootnoshenie
+            sum += term;
+        }
+
+        // Vyvod resultatov dlya tekuschego x
+        printf("%6.2lf  %18.6lf  %18.6lf\n", x, sum, sin(x));
+    }
+
+    return 0;
+}
