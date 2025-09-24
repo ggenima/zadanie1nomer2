@@ -1,0 +1,17 @@
+int opredelenie()
+{
+	int a, b;
+	scanf_s("%d", &a);
+	while (getchar() != '\n') {
+		scanf_s("%d", &b);
+		if (b < a) {
+			a = b;
+		}
+	}
+	return a;
+}
+int main()
+{
+	printf("\n%d", opredelenie());
+	return 0;
+}
