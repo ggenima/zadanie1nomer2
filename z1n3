@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <string.h>
+
+char* convert(unsigned short x, char* h) {
+    for (int i = 3; i >= 0; i--) {
+        unsigned char digit = (x >> (i * 4)) & 0xF;
+        char hDigit[2] = "\0";
+        if (digit < 10) hDigit[0] = '0' + digit;  
+        else hDigit[0] = 'A' + (digit - 10);  
+        strcat_s(h, 17, hDigit);
+    }
+    return h;
+}
+
+int main() {
+    unsigned short number = 255;
+    char h[17] = { '\0' };
+    printf("%s\n", convert(number, h));
+    return 0;
+}
