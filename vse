@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double x_nac, x_end, dx, e;    
+    scanf_s("%lf", &x_nac);   
+    scanf_s("%lf", &x_end);  
+    scanf_s("%lf", &dx);
+    scanf_s("%lf", &e);
+    printf("\nresultati dlya sin(x) shitaem dlya tochnosti %g:\n", e);
+    printf("--------------------------------------------\n");
+    printf("    x      shitaem sin(x)  standarniy sin(x)\n");
+    printf("--------------------------------------------\n");
+
+    
+    for (double x = x_nac; x <= x_end; x += dx) {
+        double term = x;  
+        double sum = term;
+        int n = 0;      
+        while (fabs(term) >= e) {
+            n++;
+            term *= -x * x / ((2 * n) * (2 * n + 1)); 
+            sum += term;
+        } 
+        printf("%6.2lf  %18.6lf  %18.6lf\n", x, sum, sin(x));
+    }
+    return 0;
+}
+
+//int opredelenie()
+//{
+//    int a, b;
+//    scanf_s("%d", &a);
+//    while (getchar() != '\n') {
+//        scanf_s("%d", &b);
+//        if (b < a) {
+//            a = b;
+//        }
+//    }
+//    return a;
+//}
+//int main()
+//{
+//    printf("\n%d", opredelenie());
+//    return 0;
+//}
+
+
+//#include <stdio.h>
+//#include <string.h>
+//
+//char* convert(unsigned short x, char* h) {
+//    for (int i = 3; i >= 0; i--) {
+//        unsigned char digit = (x >> (i * 4)) & 0xF;
+//        char hDigit[2] = "\0";
+//        if (digit < 10) hDigit[0] = '0' + digit;
+//        else hDigit[0] = 'A' + (digit - 10);
+//        strcat_s(h, 17, hDigit);
+//    }
+//    return h;
+//}
+//
+//int main() {
+//    unsigned short number = 255;
+//    char h[17] = { '\0' };
+//    printf("%s\n", convert(number, h));
+//    return 0;
+//}
+//
