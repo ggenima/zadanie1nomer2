@@ -1,29 +1,32 @@
 #include <stdio.h>
 #include <math.h>
 
+double mySin(double x, double eps) {
+    double cn = x;        // первый член ряда: x
+    double s = cn;
+    for (int n = 1; fabs(cn) > eps; n++) {
+        cn = -cn * x * x / ((2 * n) * (2 * n + 1));  // умножаем на -x²/(2n(2n+1))
+        s += cn;
+    }
+    return s;
+}
+
 int main() {
-    double x_nac, x_end, dx, e;    
-    scanf_s("%lf", &x_nac);   
-    scanf_s("%lf", &x_end);  
+    double x_start, x_end, dx, eps;
+    scanf_s("%lf", &x_start);
+    scanf_s("%lf", &x_end);
     scanf_s("%lf", &dx);
-    scanf_s("%lf", &e);
-    printf("\nresultati dlya sin(x) shitaem dlya tochnosti %g:\n", e);
+    scanf_s("%lf", &eps);
+
+    printf("\nresultati dlya sin(x) shitaem dlya tochnosti %g:\n", eps);
     printf("--------------------------------------------\n");
     printf("    x      shitaem sin(x)  standarniy sin(x)\n");
     printf("--------------------------------------------\n");
 
-    
-    for (double x = x_nac; x <= x_end; x += dx) {
-        double term = x;  
-        double sum = term;
-        int n = 0;      
-        while (fabs(term) >= e) {
-            n++;
-            term *= -x * x / ((2 * n) * (2 * n + 1)); 
-            sum += term;
-        } 
-        printf("%6.2lf  %18.6lf  %18.6lf\n", x, sum, sin(x));
+    for (double x = x_start; x <= x_end + 1e-10; x += dx) {
+        printf("%6.2lf  %18.6lf  %18.6lf\n", x, mySin(x, eps), sin(x));
     }
+
     return 0;
 }
 
