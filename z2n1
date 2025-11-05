@@ -1,8 +1,3 @@
-// Найти сумму элементов в тех столбцах, которые содержат хотя бы один отрицательный элемент.
-
-#include <stdio.h>
-
-
 int main() {
     // Квадратная матрица 3x3
     int matrix[3][3] = {
@@ -22,6 +17,7 @@ int main() {
         printf("\n");
     }
 
+    
     int found = 0;
 
     for (int j = 0; j < m; j++) {
@@ -34,9 +30,10 @@ int main() {
         }
 
         if (has_negative) {
-            printf("%d\n", j + 1, sum);
+            printf("%d: %d\n", j + 1, sum);
             found = 1;
         }
     }
-    return 0;
+
+    
 }
