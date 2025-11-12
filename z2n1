@@ -1,14 +1,8 @@
-int main() {
-    // Квадратная матрица 3x3
-    int matrix[3][3] = {
-        {10,  20, -5},
-        {15, -25, 30},
-        {40,  50, 60}
-    };
+#include <stdio.h>
 
-    int n = 3;
-    int m = 3;
 
+void Matrix(int matrix[][3], int n, int m) {
+    
     printf(" %dx%d:\n", n, m);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -19,21 +13,35 @@ int main() {
 
     
     int found = 0;
-
     for (int j = 0; j < m; j++) {
-        int has_negative = 0;
+        int a = 0;
         int sum = 0;
 
         for (int i = 0; i < n; i++) {
-            if (matrix[i][j] < 0) has_negative = 1;
+            if (matrix[i][j] < 0) a = 1;
             sum += matrix[i][j];
         }
 
-        if (has_negative) {
+        if (a) {
             printf("%d: %d\n", j + 1, sum);
             found = 1;
         }
     }
+}
 
-    
+int main() {
+   
+    int matrix[3][3] = {
+        {10,  20, -5},
+        {15, -25, 30},
+        {40,  50, 60}
+    };
+
+    int n = 3;
+    int m = 3;
+
+   
+    Matrix(matrix, n, m);
+
+    return 0;
 }
