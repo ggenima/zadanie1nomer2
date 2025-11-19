@@ -2,12 +2,13 @@
 1 Характеристикой столбца целочисленной матрицы назовем сумму модулей его отрицательных нечетных элементов. Переставляя столбцы заданной матрицы, расположить их в соответствии с ростом характеристик.
 // Характеристикой столбца целочисленной матрицы назовем сумму модулей его отрицательных нечетных элементов. 
 // Переставляя столбцы заданной матрицы, расположить их в соответствии с ростом характеристик.
+
 #include <stdio.h>
 int har(int* a, int n) {
 	int s = 0;
-	for (int i = 1; i <n; i+=2) {
-		if(a[i]<0)
-		s += -a[i];
+	for (int i = 1; i < n; i += 2) {
+		if (a[i] < 0)
+			s += -a[i];
 	}
 	return s;
 }
@@ -23,7 +24,7 @@ void transe(int matrix[n][m]) {
 		}
 	}
 }
-void printArr(int matrix[n][m]){
+void printArr(int matrix[n][m]) {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			printf("%4d", matrix[i][j]);
@@ -33,23 +34,116 @@ void printArr(int matrix[n][m]){
 
 
 }
-
+void printArr(int** matrix,int n,int m) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			printf("%4d", matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
+template <class T>
+void boobleSort(T* a, int n) {
+	bool flag = true;
+	while (flag) {
+		flag = false;
+		for (int i = 0; i < n - 1; i++) {
+			if (har(a[i],5) > har(a[i + 1],5)) {
+				T t = a[i]; a[i] = a[i + 1]; a[i + 1] = t;
+				flag = true;
+			}
+		}
+	}
+}
 int main() {
-	int arr[10] = { 100,2,3,4,5,6,7,8,9,10 };
-//	printf("%d", *(arr+1));
+	//int arr[10] = { 100,2,3,4,5,6,7,8,9,10 };
+	//	printf("%d", *(arr+1));
 	int matrix[5][5] = {
 		{-1,2,3,-3,0},
 		{1,-2,3,-10,0},
 		{1,2,-3,-4,0},
 		{ 1,2,-3,-4,0 },
-	{ 1,2,-3,-4,0 }
+		{ 1,2,-3,-4,0 }
 	};
+	
+	
+		
+
+
+	
+	printf("\n");
+	transe(matrix);
 	for (int i = 0; i < 5; i++) {
 		int k = har(matrix[i], 5);
-		printf("%d  ", k);
+		printf("%4d  ", k);
 	}
+	printf("\n");
+	printArr(matrix);
+	int** arr = new int* [5];
+	for (int i = 0; i < 5; i++)
+		arr[i] = new int[5];
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			arr[i][j] = matrix[i][j];
+		}
+	}
+	boobleSort(arr, 5);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			matrix[i][j] = arr[i][j];
+		}
+	}
+	// T = int*	
 
+	printf("\n");
+	transe(matrix);
+	printArr(matrix);
 }
 2 Найти сумму элементов в тех столбцах, которые содержат хотя бы один отрицательный элемент.
+
+void Matrix(int matrix[][3], int n, int m) {
+    
+    printf(" %dx%d:\n", n, m);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            printf("%4d", matrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    
+    int found = 0;
+    for (int j = 0; j < m; j++) {
+        int a = 0;
+        int sum = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (matrix[i][j] < 0) a = 1;
+            sum += matrix[i][j];
+        }
+
+        if (a) {
+            printf("%d: %d\n", j + 1, sum);
+            found = 1;
+        }
+    }
+}
+
+int main() {
+   
+    int matrix[3][3] = {
+        {10,  20, -5},
+        {15, -25, 30},
+        {40,  50, 60}
+    };
+
+    int n = 3;
+    int m = 3;
+
+   
+    Matrix(matrix, n, m);
+
+    return 0;
+}
 
 3 Написать программу, которая считывает текст из файла и выводит на экран только цитаты, то есть предложения, заключенные в кавычки.
