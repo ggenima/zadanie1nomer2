@@ -1,0 +1,23 @@
+#include <stdio.h>
+цифры в файле
+int File(const char* fname) {
+	FILE* f, * fn;
+	fopen_s(&f, fname, "r");
+	if (f = NULL) {
+		printf("file not open");
+		return -1;
+	}
+	int sum = 0;
+	int number;
+	while (fscanf_s(f, "%d", &number) == 1) {
+		sum += number;
+	}
+	fclose(f);
+
+	printf("%d\n", sum);
+	return 0;
+}
+int main()
+{
+  
+}
