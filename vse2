@@ -148,19 +148,20 @@ int main() {
 
 3 Написать программу, которая считывает текст из файла и выводит на экран только цитаты, то есть предложения, заключенные в кавычки.
 
-
+#include <windows.h>
+#include <locale.h>
 #include <stdio.h>
 
 int kavichki(const char* filename) {
     FILE* f;
     int c;
     int a = 0;
-    f = fopen(filename, "r");
+    fopen_s(&f, filename, "r");
     if (f == NULL) {
         printf("ERROR %s\n", filename);
-        return -1; 
+        return -1;
     }
-    while ((c = fgetc(f)) != EOF) {
+    while (c = fgetc(f)) {
         if (c == '"') {
             a = !a;
             putchar(c);
@@ -173,16 +174,15 @@ int kavichki(const char* filename) {
         }
     }
     fclose(f);
-    return 0; 
+    return 0;
 }
 
 int main() {
-    int result = kavichki("text.txt");
+    int result = kavichki("C:\\Users\\dayakovlev2\\source\\repos\\ConsoleApplication1\\input.txt");
     if (result != 0) {
         printf("ERROR\n");
         return 1;
     }
     return 0;
 }
-
 
