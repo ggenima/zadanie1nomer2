@@ -105,3 +105,120 @@ public:
     friend int findTotal(const Order orders[], int size, const char* account);
 };
 H
+
+
+
+
+ОТСЮДА НОВОЕ ДАНЯ ТОЛСТЫЙ
+#include <iostream>
+#include <fstream>
+#include "Order.h"
+
+using namespace std;
+
+int main()
+{
+    Order bank[100]; // Массив для хранения операций
+    int count = 0;   // Количество загруженных операций
+    
+    // Чтение данных из файла
+    cout << "=== Zagruzka dannyh iz file ===" << endl;
+    readOrdersFromFile("orders.txt", bank, count);
+    
+    if (count == 0) {
+        cout << "Net dannyh dlya obrabotki. Sozdayte file orders.txt" << endl;
+        return 1;
+    }
+    
+    // Вывод всех операций
+    cout << "\n=== Vse operacii iz file ===" << endl;
+    for (int i = 0; i < count; i++) {
+        bank[i].print();
+    }
+    
+    // Поиск суммы по номеру счёта
+    cout << "\n=== Poisk summy po nomeru scheta ===" << endl;
+    
+    // Поиск по нескольким счетам
+    const char* accounts[] = {"12345678", "55556666", "77777777", "99999999", "11112222"};
+    int numAccounts = 5;
+    
+    for (int i = 0; i < numAccounts; i++) {
+        int result = findTotal(bank, count, accounts[i]);
+        cout << "Obshaya summa po schetu " << accounts[i] << ": " << result << " rub" << endl;
+    }
+    
+    // Поиск по счету, введенному пользователем
+    cout << "\nVvedite nomer scheta dlya poiska (ili 'exit' dlya vyhoda):" << endl;
+    
+    char input[20];
+    while (true) {
+        cout << ">> ";
+        cin >> input;
+        
+        if (strcmp(input, "exit") == 0) {
+            break;
+        }
+        
+        int result = findTotal(bank, count, input);
+        cout << "Obshaya summa po schetu " << input << ": " << result << " rub" << endl;
+    }
+    
+    return 0;
+}
+#include "Order.h"
+#include <iostream>
+#include <cstring>
+#include <fstream>
+
+using namespace std;
+
+Order::Order(const char* p, const char* r, int s)
+{
+    strcpy_s(payer, 20, p);
+    strcpy_s(receiver, 20, r);
+    sum = s;
+}
+
+void Order::print() const {
+    cout << "Platelshik: " << payer << endl;
+    cout << "Poluchatel: " << receiver << endl;
+    cout << "Summa: " << sum << " rub" << endl;
+    cout << "------------------------" << endl;
+}
+
+// Функция поиска суммы по счету
+int findTotal(const Order orders[], int size, const char* account) {
+    int total = 0;
+    
+    for (int i = 0; i < size; i++) {
+        if (strcmp(orders[i].payer, account) == 0 || 
+            strcmp(orders[i].receiver, account) == 0) {
+            total += orders[i].sum;
+        }
+    }
+    
+    return total;
+}
+
+// Функция чтения данных из файла
+void readOrdersFromFile(const char* filename, Order orders[], int& count) {
+    ifstream file(filename);
+    count = 0;
+    
+    if (!file.is_open()) {
+        cout << "Oshibka: File ne nayden!" << endl;
+        return;
+    }
+    
+    char p[20], r[20];
+    int s;
+    
+    while (file >> p >> r >> s && count < 100) {
+        orders[count] = Order(p, r, s);
+        count++;
+    }
+    
+    file.close();
+    cout << "Zagruzheno " << count << " operaciy iz file" << endl;
+}
