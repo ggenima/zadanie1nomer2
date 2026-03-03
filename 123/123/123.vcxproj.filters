@@ -26,5 +26,14 @@
     <ClInclude Include="Train.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\text.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="text.txt" />
   </ItemGroup>
 </Project>
