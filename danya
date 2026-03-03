@@ -1,0 +1,107 @@
+#include <iostream>
+#include <fstream>
+#include "Order.h"
+
+using namespace std;
+
+int main()
+{
+    Order order("12345678", "87654321", 1500);
+    cout << "Pervaya operacia:" << endl;
+    order.print();
+    
+    Order bank[8] = {
+        {"11112222", "33334444", 5000},
+        {"55556666", "77778888", 10000},
+        {"99990000", "11223344", 25000},
+        {"13572468", "124681357", 75000},
+        {"98765432", "12345678", 300000},
+        {"55555555", "66666666", 15000},
+        {"77777777", "88888888", 12000},
+        {"12345678", "99999999", 5000}
+    };
+    
+    cout << "\nVse operacii:" << endl;
+    for (int i = 0; i < 8; i++) {
+        bank[i].print();
+    }
+    
+    // Поиск суммы по номеру счёта
+    cout << "\n=== Poisk summy po nomeru scheta ===" << endl;
+    
+    const char* schet1 = "12345678";
+    int result1 = findTotal(bank, 8, schet1);
+    cout << "Obshaya summa po schetu " << schet1 << ": " << result1 << " rub" << endl;
+    
+    const char* schet2 = "55556666";
+    int result2 = findTotal(bank, 8, schet2);
+    cout << "Obshaya summa po schetu " << schet2 << ": " << result2 << " rub" << endl;
+    
+    const char* schet3 = "77777777";
+    int result3 = findTotal(bank, 8, schet3);
+    cout << "Obshaya summa po schetu " << schet3 << ": " << result3 << " rub" << endl;
+    
+    const char* schet4 = "99999999";
+    int result4 = findTotal(bank, 8, schet4);
+    cout << "Obshaya summa po schetu " << schet4 << ": " << result4 << " rub" << endl;
+    
+    return 0;
+}
+#include "Order.h"
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+Order::Order(const char* p, const char* r, int s)
+{
+    strcpy_s(payer, 20, p);
+    strcpy_s(receiver, 20, r);
+    sum = s;
+}
+
+Order::Order() {
+    payer[0] = '\0';
+    receiver[0] = '\0';
+    sum = 0;
+}
+
+void Order::print() {
+    cout << "Platelshik: " << payer << endl;
+    cout << "Poluchatel: " << receiver << endl;
+    cout << "Summa: " << sum << " rub" << endl;
+    cout << "------------------------" << endl;
+}
+
+// Упрощённая функция поиска
+int findTotal(const Order orders[], int size, const char* account) {
+    int total = 0;
+    
+    for (int i = 0; i < size; i++) {
+        if (strcmp(orders[i].payer, account) == 0 || 
+            strcmp(orders[i].receiver, account) == 0) {
+            total += orders[i].sum;
+        }
+    }
+    
+    return total;
+}
+Cpp
+#pragma once
+#include <iostream>
+
+class Order
+{
+private:
+    char payer[20];
+    char receiver[20];
+    int sum;
+public:
+    Order(const char* p, const char* r, int s);
+    Order();
+    void print();
+    
+    // Дружественная функция для доступа к приватным полям
+    friend int findTotal(const Order orders[], int size, const char* account);
+};
+H
