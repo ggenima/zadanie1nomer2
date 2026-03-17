@@ -1,12 +1,19 @@
 ﻿#include <iostream>
 #include <fstream>
 #include "Train.h"
+#include <istream>
+
+int compTime(const void* a, const void* b) {
+    return ((Train*)a)->time - ((Train*)b)->time;
+}
 int main()
+
 {
     ifstream in = ifstream("text.txt");
     if (!in) return 1;
     Train st[4];
     int n = 0; 
+
     while (in >> st[n])n++;
     for (Train m : st)
         cout << m << "\n";
@@ -24,6 +31,13 @@ int main()
     {
         cout << arr[i] << "\n";
     }
+
+    qsort(arr, nZ, sizeof(Train), compTime);
+    for (int i = 0; i < nZ; i++)
+    {
+        cout << "sort   " << arr[i] << "\n";
+    }
+    
    // fstream in2 = fstream("Train.bin", ios::binary | ios: in2.read((char*)&Train, sizeof(Train))
    
     
