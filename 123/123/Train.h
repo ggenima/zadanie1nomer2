@@ -20,4 +20,10 @@ public:
 	friend istream& operator>>(istream& os, Train& m) {
 		return os >> m.station >> m.number >> m.time;
 	}
+	static int compTime(const void* a, const void* b) {
+		return ((Train*)a)->time - ((Train*)b)->time;
+	}
+	static int compNumber(const void* a, const void* b) {
+		return ((Train*)a)->number - ((Train*)b)->number;
+	}
 };
