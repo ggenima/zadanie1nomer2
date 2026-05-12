@@ -1,0 +1,335 @@
+// helpme.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+//
+
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <algorithm>
+#include "train.h"
+#include "sort.h"
+using namespace std;
+
+
+// Простая реализация бинарного поиска в массиве структур
+int binarySearch(Train* arr, int size, int key) {
+    int left = 0, right = size - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid].number == key)
+            return mid;
+        if (arr[mid].number < key)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    return -1;
+}
+bool compareByStation(const Train& a, const Train& b) {
+    return strcmp(a.station, b.station) < 0;  // a.station раньше по алфавиту
+}
+
+// Сравнение по номеру (возрастание)
+bool compareByNumber(const Train& a, const Train& b) {
+    return a.number < b.number;  // у a номер меньше
+}
+
+// Сравнение по времени (возрастание)
+bool compareByTime(const Train& a, const Train& b) {
+    return a.time < b.time;  // у a время меньше
+}
+
+int main() {
+    // Чтение из текстового файла
+    ifstream in("text.txt");
+    if (!in) {
+        cerr << "Error opening text.txt\n";
+        return 1;
+    }
+
+    Train st[4];
+    int n = 0;
+    while (n < 4 && in >> st[n]) {
+        n++;
+    }
+    in.close();
+
+    cout << "prochitannie poezda:\n";
+    for (int i = 0; i < n; i++)
+        cout << st[i] << "\n";
+
+    // Запись в бинарный файл
+    ofstream of("Train.bin", ios::binary);
+    of.write((char*)st, n * sizeof(Train));
+    of.close();
+
+    // Чтение из бинарного файла
+    ifstream in1("Train.bin", ios::binary);
+    in1.seekg(0, ios::end);
+    int file_size = (int)in1.tellg();
+    int nZ = file_size / sizeof(Train);
+
+    Train* arr = new Train[nZ];
+    in1.seekg(0, ios::beg);
+    in1.read((char*)arr, nZ * sizeof(Train));
+    in1.close();
+
+   
+    for (int i = 0; i < nZ; i++)
+        cout << arr[i] << "\n";
+
+    // Сортировка по времени
+    qsort(arr, nZ, sizeof(Train), Train::compTime);
+    cout << "\nsort po vremeni:\n";
+    for (int i = 0; i < nZ; i++)
+        cout << arr[i] << "\n";
+
+    // Сортировка по номеру и бинарный поиск
+    qsort(arr, nZ, sizeof(Train), Train::compNumber);
+    cout << "\nsort po nomeru:\n";
+    for (int i = 0; i < nZ; i++)
+        cout << arr[i] << "\n";
+
+    int Key = 10; // Номер поезда для поиска
+    int index = binarySearch(arr, nZ, Key);
+
+    if (index != -1)
+        cout << "\npoezd s nomerom " << Key << " :\n" << arr[index] << endl;
+    else
+        cout << "\npoezd s nomerom " << Key << " ne nashel\n";
+
+
+    cout << "\n1. bubble:\n";
+    bubbleSort(arr, n, compareByStation);
+    for (int i = 0; i < n; i++) cout << arr[i] << endl;
+
+    cout << "\n2. Сортировка выбором:\n";
+    selectionSort(arr, n, compareByNumber);
+    for (int i = 0; i < n; i++) cout << arr[i] << endl;
+
+    cout << "\n3. Сортировка вставками:\n";
+    insertionSort(arr, n, compareByTime);
+    for (int i = 0; i < n; i++) cout << arr[i] << endl;
+
+    cout << "\n4. Сортировка Шелла:\n";
+    shellSort(arr, n, compareByStation);
+    for (int i = 0; i < n; i++) cout << arr[i] << endl;
+
+    cout << "\n5. Сортировка расчёской:\n";
+    combSort(arr, n, compareByNumber);
+    for (int i = 0; i < n; i++) cout << arr[i] << endl;
+    delete[] arr;
+    return 0;
+}
+// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
+// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+
+// Советы по началу работы 
+//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
+//   2. В окне Team Explorer можно подключиться к системе управления версиями.
+//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
+//   4. В окне "Список ошибок" можно просматривать ошибки.
+//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
+//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "Train.h"
+#include <iostream>
+#include <string.h>
+Train::Train() {
+	//std::cout << "structor\n";
+}
+Train::Train(char* station, int number, int time) {
+	strcpy_s(this->station, 10, station);
+	this->number = number;
+	this->time = time;
+}
+Train::Train(const char* station, int number, int time) {
+	strcpy_s(this->station, 10, station);
+	this->number = number;
+	this->time = time;
+}
+Train::~Train()
+{
+	//std::cout << "destructor\n";
+}
+bool Train::operator>(const Train& b)
+{
+	return strcmp(this->station, b.station) > 0;
+
+}
+
+
+Train& Train::operator = (const Train& b)
+{
+	strcpy_s(this->station, b.station);
+	this->number = b.number;
+	this->time = b.time;
+	return  *this;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+#include "Train.h"
+#pragma once
+int binarySech(int key, int* arr, int n) {
+	int left = 0;
+	int mid = 0;
+	int right = n - 1 ;
+    while (left < right) {
+        mid = (left + right) / 2;
+        if (key < arr[mid])right = mid;
+        else if (key > arr[mid])left = mid;
+        else return mid;
+    }
+    return -1;
+}
+
+void bubbleSort(Train arr[], int n, bool (*comp)(const Train&, const Train&)) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (comp(arr[j + 1], arr[j])) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void selectionSort(Train arr[], int n, bool (*comp)(const Train&, const Train&)) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (comp(arr[j], arr[minIdx])) {
+                minIdx = j;
+            }
+        }
+        if (minIdx != i) {
+            swap(arr[i], arr[minIdx]);
+        }
+    }
+}
+void insertionSort(Train arr[], int n, bool (*comp)(const Train&, const Train&)) {
+    for (int i = 1; i < n; i++) {
+        Train key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && comp(key, arr[j])) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+void shellSort(Train arr[], int n, bool (*comp)(const Train&, const Train&)) {
+    // Начинаем с большого шага, затем уменьшаем
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        // Делаем insertion sort для текущего шага
+        for (int i = gap; i < n; i++) {
+            Train temp = arr[i];
+            int j;
+            for (j = i; j >= gap && comp(temp, arr[j - gap]); j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+void combSort(Train arr[], int n, bool (*comp)(const Train&, const Train&)) {
+    int gap = n;
+    bool swapped = true;
+    const double shrink = 1.3;  // фактор уменьшения
+
+    while (gap > 1 || swapped) {
+        // Уменьшаем шаг
+        gap = (int)(gap / shrink);
+        if (gap < 1) gap = 1;
+
+        swapped = false;
+
+        // Сравниваем элементы с текущим шагом
+        for (int i = 0; i < n - gap; i++) {
+            if (comp(arr[i + gap], arr[i])) {
+                swap(arr[i], arr[i + gap]);
+                swapped = true;
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+#pragma once
+#include <fstream>
+using namespace std;
+class Train
+{
+public:
+	char station[10];
+	int number;
+	int time;
+	Train();
+	Train(char* station, int number, int time);
+	Train(const char* station, int number, int time);
+	~Train();
+	bool operator >(const Train& b);
+	Train& operator = (const Train& b);
+	friend ostream& operator<<(ostream& os, const Train& m) {
+		return os << m.station << " " << m.number << " " << m.time;
+	}
+	friend istream& operator>>(istream& os, Train& m) {
+		return os >> m.station >> m.number >> m.time;
+	}
+	static int compTime(const void* a, const void* b) {
+		return ((Train*)a)->time - ((Train*)b)->time;
+	}
+	static int compNumber(const void* a, const void* b) {
+		return ((Train*)a)->number - ((Train*)b)->number;
+	}
+};
